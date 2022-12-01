@@ -1,0 +1,2 @@
+/usr/bin/ar qc librobot_kinematics.a CMakeFiles/robot_kinematics.dir/src/robot_kinematics.cpp.o
+/usr/bin/ranlib librobot_kinematics.a
