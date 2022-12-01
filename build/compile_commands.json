@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/home/petafect/remy_robotics_1/build",
+  "command": "/usr/bin/g++  -I/home/petafect/remy_robotics_1/include -g -o CMakeFiles/robot_kinematics.dir/src/robot_kinematics.cpp.o -c /home/petafect/remy_robotics_1/src/robot_kinematics.cpp",
+  "file": "/home/petafect/remy_robotics_1/src/robot_kinematics.cpp"
+},
+{
+  "directory": "/home/petafect/remy_robotics_1/build",
+  "command": "/usr/bin/g++  -I/home/petafect/remy_robotics_1/include -g -o CMakeFiles/main.dir/src/main.cpp.o -c /home/petafect/remy_robotics_1/src/main.cpp",
+  "file": "/home/petafect/remy_robotics_1/src/main.cpp"
+}
+]

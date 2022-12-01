@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -I/home/petafect/remy_robotics_1/include
 
-CXX_FLAGS = 
+CXX_FLAGS = -g
 
