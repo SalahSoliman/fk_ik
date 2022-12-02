@@ -15,11 +15,15 @@ int main()
     // auto s = test.InverseKinematics();
     // std::cout << s << std::endl;
 
-    Eigen::MatrixXd Xd(3, 1);
-    Xd(0, 0) = 0.2;
-    Xd(1, 0) = 0.3;
-    Xd(2, 0) = 0.4;
+    // Eigen::MatrixXd Xd(3, 1);
+    // Xd(0, 0) = 0.2;
+    // Xd(1, 0) = 0.3;
+    // Xd(2, 0) = 0.4;
 
-    auto x = test.Jacobian(Xd, 0.1);
+    // auto x = test.Jacobian(Xd, 0.1);
+
+    Eigen::Matrix<double, 3, 1> x{1, 2, 3};
+
+    std::cout << x.cross(x)
     std::cout << x << std::endl;
 }

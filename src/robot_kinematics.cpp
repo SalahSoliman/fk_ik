@@ -44,52 +44,37 @@ Eigen::MatrixXd Robot::Jacobian(Eigen::MatrixXd &angles, double dt)
     Eigen::MatrixXd R0_0{{1.0, 0, 0},
                          {0, 1.0, 0},
                          {0, 0, 1.0}};
-    Eigen::Matrix<double, 3, 1> D0_0 = Eigen::Matrix<double, 3, 1>::Zero();
+    Eigen::Matrix4d temp{{1.0, 0, 0, 0},
+                         {0, 1.0, 0, 0},
+                         {0, 0, 1.0, 0},
+                         {0, 0, 0, 1.0}};
 
-    Eigen::MatrixXd R0_1;
-    Eigen::Matrix<double, 3, 1> D0_1 = Eigen::Matrix<double, 3, 1>::Zero();
+    Eigen::Matrix4d transformation = temp;
+    Eigen::Matrix<double, 3, 1>
+        zero_zero_one{0, 0, 1};
 
-    for (int i = 0; i < 2; i++)
-    {
-        robot_transformation = robot_transformation * this->Transformation(dh_parameters(i, 0), dh_parameters(i, 1), dh_parameters(i, 2), angles(i, 0));
-    }
+    // first term
 
-    D0_1 = robot_transformation.block(0, 3, 3, 1);
-    R0_1 = robot_transformation.block(0, 0, 3, 3);
+    Eigen::Matrix<double, 4, 4> T0_3 = ForwardKinematics(angles);
+    Eigen::Matrix<double, 3, 3> R0_3 = T0_3.block(0, 0, 3, 3);
 
-    Eigen::MatrixXd R0_2;
-    for (int i = 0; i < 3; i++)
-    {
-        robot_transformation = robot_transformation * this->Transformation(dh_parameters(i, 0), dh_parameters(i, 1), dh_parameters(i, 2), angles(i, 0));
-    }
+    Eigen::Matrix<double, 3, 1> D0_3 = T0_3.block(0, 0, 3, 1);
+    Eigen::Matrix<double, 3, 1> first_term = zero_zero_one.cross(D0_3);
+    // second term
+    transformation = transformation * this->Transformation(dh_parameters(0, 0), dh_parameters(0, 1), dh_parameters(0, 2), angles(0, 0)); // transform from 0 to 1
+    Eigen::Matrix<double, 3, 1> D0_1 = transformation.block(0, 0, 3, 1);
+    Eigen::Matrix<double, 3, 3> R0_1 = transformation.block(0, 0, 3, 3);
+    Eigen::Matrix<double, 3, 1> second_term = R0_1 * zero_zero_one;
+    second_term = second_term.cross(D0_3 - D0_1);
 
-    Eigen::Matrix<double, 3, 1> D0_2 = robot_transformation.block(0, 3, 3, 1); // first
-    R0_2 = robot_transformation.block(0, 0, 3, 3);
+    // third term
+    transformation = transformation * this->Transformation(dh_parameters(1, 0), dh_parameters(1, 1), dh_parameters(1, 2), angles(1, 0)); // transform from 0 to 1
+    Eigen::Matrix<double, 3, 1> D0_2 = transformation.block(0, 0, 3, 1);
+    Eigen::Matrix<double, 3, 3> R0_2 = transformation.block(0, 0, 3, 3);
+    Eigen::Matrix<double, 3, 1> third_term = R0_2 * zero_zero_one;
+    third_term = third_term.cross(D0_3 - D0_2);
 
-    Eigen::Matrix<double, 3, 1> M1{0, 0, 1};
-
-    Eigen::Matrix<double, 6, 3> J;
-
-    J.block(0, 0, 3, 1) = R0_0 * M1.cross(D0_2 - D0_0);
-#if DEBUG_JACOBIAN
-    std::cout << R0_0.rows() << "\t" << R0_0.cols() << std::endl;
-    std::cout << M1.rows() << "\t" << M1.cols() << std::endl;
-
-    Eigen::Matrix<double, 3, 1> x = R0_0 * M1;
-    x = x.cross(D0_2 - D0_0);
-    std::cout << x.rows() << "\t" << x.cols();
-#endif
-    J.block(3, 0, 3, 1) = M1;
-
-    J.block(0, 1, 3, 1) = R0_1 * M1.cross(D0_2 - D0_1);
-    J.block(3, 1, 3, 1) = M1;
-
-    J.block(0, 2, 3, 1) = R0_2 * M1.cross(D0_2 - D0_2);
-    J.block(3, 2, 3, 1) = M1;
-
-    Eigen::Matrix<double, 3, 3> Jv = J.block(0, 0, 3, 3);
-
-    return J;
+    return temp;
 }
 
 Eigen::VectorXd Robot::InverseKinematics()
@@ -117,7 +102,7 @@ Eigen::VectorXd Robot::InverseKinematics()
     //  solve IK numerically
     while ((std::abs(e(0, 0)) > 0.1) || (std::abs(e(1, 0)) > 0.1) || (std::abs(e(2, 0)) > 0.1))
     {
-        Eigen::MatrixXd invJ = this->Jacobian(i_theta, 0.1).completeOrthogonalDecomposition().pseudoInverse(); 
+        Eigen::MatrixXd invJ = this->Jacobian(i_theta, 0.1).completeOrthogonalDecomposition().pseudoInverse();
 
 #if DEBUG_IK
         std::cout << invJ.rows() << "\t" << invJ.cols();
