@@ -479,6 +479,7 @@ CMakeFiles/main.dir/src/main.cpp.o: ../src/main.cpp \
   /usr/include/c++/11/backward/auto_ptr.h \
   /usr/include/c++/11/pstl/glue_memory_defs.h \
   /usr/include/c++/11/math.h \
+  ../include/Connection.h \
   /usr/include/c++/11/iostream
 
 
@@ -885,6 +886,8 @@ CMakeFiles/main.dir/src/main.cpp.o: ../src/main.cpp \
 /usr/include/x86_64-linux-gnu/bits/pthreadtypes.h:
 
 /usr/include/c++/11/tr1/riemann_zeta.tcc:
+
+../include/Connection.h:
 
 /usr/include/x86_64-linux-gnu/bits/math-vector.h:
 

@@ -479,7 +479,8 @@ CMakeFiles/robot_kinematics.dir/src/robot_kinematics.cpp.o: ../src/robot_kinemat
   /usr/include/c++/11/bits/shared_ptr_atomic.h \
   /usr/include/c++/11/backward/auto_ptr.h \
   /usr/include/c++/11/pstl/glue_memory_defs.h \
-  /usr/include/c++/11/math.h
+  /usr/include/c++/11/math.h \
+  ../include/Connection.h
 
 
 /usr/include/c++/11/pstl/glue_memory_defs.h:
@@ -1335,6 +1336,8 @@ CMakeFiles/robot_kinematics.dir/src/robot_kinematics.cpp.o: ../src/robot_kinemat
 /usr/include/c++/11/bits/vector.tcc:
 
 /usr/include/c++/11/bits/stl_algo.h:
+
+../include/Connection.h:
 
 /usr/include/x86_64-linux-gnu/bits/math-vector.h:
 
